@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder Form</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <header>
+        <div class="header-title">CHANAKYA RESUME AI</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Build Your Resume</h1>
+        <div class="form-page-container">
+            <section class="form-section form-container">
+                <h2>Enter Your Details</h2>
+                <form id="resume-form">
+                    <h3>Personal Information</h3>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn Profile:</label>
+                        <input type="text" id="linkedin" name="linkedin">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summary">Summary/Objective:</label>
+                        <textarea id="summary" name="summary" rows="5"></textarea>
+                    </div>
+
+                    <h3>Education</h3>
+                    <div id="education-fields" class="education-fields">
+                        <div class="education-entry form-group">
+                            <label for="degree">Degree:</label>
+                            <input type="text" class="degree" name="education[0][degree]">
+                            <label for="university">University:</label>
+                            <input type="text" class="university" name="education[0][university]">
+                            <label for="grad-year">Graduation Year:</label>
+                            <input type="text" class="grad-year" name="education[0][grad_year]">
+                        </div>
+                    </div>
+                    <button type="button" id="add-education" class="add-button">Add Education</button>
+
+                    <h3>Experience</h3>
+                    <div id="experience-fields" class="experience-fields">
+                        <div class="experience-entry form-group">
+                            <label for="job-title">Job Title:</label>
+                            <input type="text" class="job-title" name="experience[0][job_title]">
+                            <label for="company">Company:</label>
+                            <input type="text" class="company" name="experience[0][company]">
+                            <label for="duration">Duration:</label>
+                            <input type="text" class="duration" name="experience[0][duration]">
+                            <label for="responsibilities">Responsibilities:</label>
+                            <textarea class="responsibilities" name="experience[0][responsibilities]" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" id="add-experience" class="add-button">Add Experience</button>
+
+                    <h3>Skills</h3>
+                    <div class="form-group">
+                        <label for="skills">Skills (comma-separated):</label>
+                        <input type="text" id="skills" name="skills">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit">Generate Preview</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="preview-section resume-preview-container">
+                <h2>Resume Preview</h2>
+                <div id="resume-preview"></div>
+                <div class="download-buttons">
+                    <button id="download-pdf">Download PDF</button>
+                    <button id="download-image">Download Image</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 AI-Powered Resume Builder</p>
+    </footer>
+
+    <script src="form-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
