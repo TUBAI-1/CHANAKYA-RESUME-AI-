@@ -6,27 +6,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const addEducationBtn = document.getElementById('add-education');
     const addExperienceBtn = document.getElementById('add-experience');
 
-    let educationCount = 1;
-    let experienceCount = 1;
+    let educationCount = 0;
+    let experienceCount = 0;
+
+    // Function to create a form group div
+    const createFormGroup = (label, inputHtml) => {
+        const div = document.createElement('div');
+        div.classList.add('form-group');
+        div.innerHTML = `<label>${label}:</label>${inputHtml}`;
+        return div;
+    };
 
     addEducationBtn.addEventListener('click', () => {
         const educationFields = document.getElementById('education-fields');
         const newEducationEntry = document.createElement('div');
         newEducationEntry.classList.add('education-entry');
-        newEducationEntry.innerHTML = `
-            <div class="form-group">
-                <label for="degree">Degree:</label>
-                <input type="text" class="degree" name="education[${educationCount}][degree]">
-            </div>
-            <div class="form-group">
-                <label for="university">University:</label>
-                <input type="text" class="university" name="education[${educationCount}][university]">
-            </div>
-            <div class="form-group">
-                <label for="grad-year">Graduation Year:</label>
-                <input type="text" class="grad-year" name="education[${educationCount}][grad_year]">
-            </div>
-        `;
+
+        newEducationEntry.appendChild(createFormGroup('Degree', `<input type="text" class="degree" name="education[${educationCount}][degree]">`));
+        newEducationEntry.appendChild(createFormGroup('University', `<input type="text" class="university" name="education[${educationCount}][university]">`));
+        newEducationEntry.appendChild(createFormGroup('Graduation Year', `<input type="text" class="grad-year" name="education[${educationCount}][grad_year]">`));
+        
         educationFields.appendChild(newEducationEntry);
         educationCount++;
     });
@@ -35,24 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const experienceFields = document.getElementById('experience-fields');
         const newExperienceEntry = document.createElement('div');
         newExperienceEntry.classList.add('experience-entry');
-        newExperienceEntry.innerHTML = `
-            <div class="form-group">
-                <label for="job-title">Job Title:</label>
-                <input type="text" class="job-title" name="experience[${experienceCount}][job_title]">
-            </div>
-            <div class="form-group">
-                <label for="company">Company:</label>
-                <input type="text" class="company" name="experience[${experienceCount}][company]">
-            </div>
-            <div class="form-group">
-                <label for="duration">Duration:</label>
-                <input type="text" class="duration" name="experience[${experienceCount}][duration]">
-            </div>
-            <div class="form-group">
-                <label for="responsibilities">Responsibilities:</label>
-                <textarea class="responsibilities" name="experience[${experienceCount}][responsibilities]" rows="3"></textarea>
-            </div>
-        `;
+
+        newExperienceEntry.appendChild(createFormGroup('Job Title', `<input type="text" class="job-title" name="experience[${experienceCount}][job_title]">`));
+        newExperienceEntry.appendChild(createFormGroup('Company', `<input type="text" class="company" name="experience[${experienceCount}][company]">`));
+        newExperienceEntry.appendChild(createFormGroup('Duration', `<input type="text" class="duration" name="experience[${experienceCount}][duration]">`));
+        newExperienceEntry.appendChild(createFormGroup('Responsibilities', `<textarea class="responsibilities" name="experience[${experienceCount}][responsibilities]" rows="3"></textarea>`));
+
         experienceFields.appendChild(newExperienceEntry);
         experienceCount++;
     });
@@ -71,16 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const skills = document.getElementById('skills').value.split(',').map(s => s.trim()).filter(s => s);
 
         const educationEntries = Array.from(document.querySelectorAll('.education-entry')).map(entry => ({
-            degree: entry.querySelector('.degree').value,
-            university: entry.querySelector('.university').value,
-            grad_year: entry.querySelector('.grad-year').value
+            degree: entry.querySelector('.degree')?.value || '',
+            university: entry.querySelector('.university')?.value || '',
+            grad_year: entry.querySelector('.grad-year')?.value || ''
         }));
 
         const experienceEntries = Array.from(document.querySelectorAll('.experience-entry')).map(entry => ({
-            job_title: entry.querySelector('.job-title').value,
-            company: entry.querySelector('.company').value,
-            duration: entry.querySelector('.duration').value,
-            responsibilities: entry.querySelector('.responsibilities').value
+            job_title: entry.querySelector('.job-title')?.value || '',
+            company: entry.querySelector('.company')?.value || '',
+            duration: entry.querySelector('.duration')?.value || '',
+            responsibilities: entry.querySelector('.responsibilities')?.value || ''
         }));
 
         let previewHtml = `
@@ -121,13 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="resume-paragraph">${skills.join(', ')}</p>
                 ` : ''}
             </div>
-        `}
+        `;
 
         resumePreview.innerHTML = previewHtml;
     }
 
     downloadPdfBtn.addEventListener('click', () => {
-        // Ensure jsPDF and html2canvas are available
         if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
             console.error('Error: jsPDF or html2canvas libraries are not loaded.');
             alert('PDF generation libraries are not loaded. Please ensure all necessary scripts are loaded correctly.');
@@ -156,15 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 heightLeft -= pageHeight;
             }
             doc.save('resume.pdf');
-        }).catch(error => { // Added error handling for html2canvas
+        }).catch(error => {
             console.error('Error generating PDF from resume preview:', error);
             alert('Failed to generate PDF. Please try again. If the problem persists, the content might be too complex or large.');
         });
     });
 
-
     downloadImageBtn.addEventListener('click', () => {
-        // Ensure html2canvas is available
         if (typeof window.html2canvas === 'undefined') {
             console.error('Error: html2canvas library is not loaded.');
             alert('Image generation library is not loaded. Please ensure all necessary scripts are loaded correctly.');
@@ -172,23 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         html2canvas(resumePreview, { scale: 2 }).then(canvas => {
-            doc.save('resume.pdf');
-        });
-    });
-
-
-    downloadImageBtn.addEventListener('click', () => {
-        html2canvas(resumePreview).then(canvas => {
             const link = document.createElement('a');
             link.download = 'resume.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
-        }).catch(error => { // Added error handling for html2canvas
+        }).catch(error => {
             console.error('Error generating image from resume preview:', error);
             alert('Failed to generate image. Please try again. If the problem persists, the content might be too complex or large.');
         });
     });
 
-    // Initial generation of preview if data exists (e.g., from session storage)
     generateResumePreview();
 });
